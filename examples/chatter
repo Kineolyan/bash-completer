@@ -1,0 +1,88 @@
+#!/bin/bash
+
+# Checks if completion must be refreshed
+# $1 stream stream containing the previous completion values, or '' if
+#     stream does not already exist
+# Returns:
+#  0 if the values are up-to-date
+#  1 if new values are set, these values are echoed
+#  2 if there is no need to store the values, these values are echoed
+#  3 if there is no completion
+__complete__options() {
+  local readonly stream="$1"
+  [ $stream -nt "$(which $0)" ] && return 0  
+  
+  echo -l --language -p --greetings
+  return 1
+}
+
+__complete__actions() {
+  local readonly stream="$1"
+  [ $stream -nt "$(which $0)" ] && return 0  
+  
+  echo "saluer moquer remercier"
+  return 1
+}
+
+__complete@l() {
+  local readonly stream="$1"
+  [ $stream -nt "$(which $0)" ] && return 0  
+
+  echo francais english espanol
+  return 1
+}
+
+__complete@@language() {
+  echo "polonais geek nerd"
+  return 1
+}
+
+__complete@p() {
+  echo "ici la ailleurs loin versailles"
+  return 2
+}
+
+# Uncommented, it says that there is no completion to do
+# Commented, the function does not exits, so it does no completion
+##__complete@@greetings() {
+##  return 3
+##}
+
+source $HOME/.completer/lib/completer-util.sh
+
+## PROGRAM PART ##
+readonly shortOpts=l:,p:
+readonly longOpts=language:,greetings
+
+args=$(getopt -s bash -o "$shortOpts" -l "$longOpts" -- "$@")
+[ $? -ne 0 ] && echo Erreur && exit 1
+
+eval set -- "$args"
+
+while true
+do
+  option="$1"
+  shift 1
+  case $option in
+    -l|--language)
+      language="[$1] "
+      shift 1 ;;
+    -p)
+      prefix="$1 - "
+      shift 1;;
+    --greetings) greetings="Greetings! " ;;
+    --) break ;;
+  esac
+done
+
+echo "${prefix}${language}${greetings}coucou"
+for action in $*
+do
+  echo -n "Je voulais te dire "
+  case $action in
+  saluer) echo "bonjour" ;;
+  moquer) echo "que tu sentais le riz. Hihi" ;;
+  remercier) echo "merci" ;;
+  *) echo "$action" ;;
+  esac
+done
