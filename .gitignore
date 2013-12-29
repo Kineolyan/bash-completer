@@ -1,4 +1,5 @@
 programs/
+__registered-programs 
 
 # Edition files
 *.swp

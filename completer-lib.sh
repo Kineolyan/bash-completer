@@ -110,31 +110,35 @@ doCompletion() {
   fi
 }
 
-readonly COMPLETION_FILE=$COMPLETION_FOLDER/__completer
+readonly REGISTRATION_FILE=$COMPLETION_FOLDER/__registered-programs
 # Registers a program for completion
 # $1 program
 register() {
   local readonly program="$1"
 
-  presence=$(grep -cE "program:${program}$" $COMPLETION_FILE)
+  [ -e $REGISTRATION_FILE ] && presence=$(grep -cE "program:${program}$" $REGISTRATION_FILE) || presence=0
 
   # Add the program to the list
-  [[ $presence = 0 ]] && echo "complete -F __completer $program # program:$program" >> $COMPLETION_FILE
+  [[ $presence = 0 ]] && echo "complete -F __completer $program # program:$program" >> $REGISTRATION_FILE
 
-  exit 0
+  return 0
 }
 
 # Registers a program for completion
 # $1 program
 unregister() {
+  [ ! -e $REGISTRATION_FILE ] && return 0
+
   local readonly program="$1"
 
   local clearFile=0
   while read line
   do
-    [[ $clearFile = 0 ]] && clearFile=1 && > $COMPLETION_FILE
-    echo $line >> $COMPLETION_FILE
-  done < <(grep -vE "^.*# program:${program}$" $COMPLETION_FILE)
+    [[ $clearFile = 0 ]] && clearFile=1 && > $REGISTRATION_FILE
+    echo $line >> $REGISTRATION_FILE
+  done < <(grep -vE "^.*# program:${program}$" $REGISTRATION_FILE)
+  
+  return 0
 }
 
 # local variables
