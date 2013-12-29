@@ -1,0 +1,44 @@
+# completer interface
+
+# Local variables:
+# mode: shell-script
+# sh-basic-offset: 2
+# sh-indent-comment: t
+# indent-tabs-mode: nil
+# End:
+# ex: ts=2 sw=2 et filetype=sh
+
+__completer() {
+  COMPREPLY=()
+  local argc=${COMP_CWORD}
+  local cur=${COMP_WORDS[$argc]}
+  local prev=${COMP_WORDS[$argc-1]}
+  local program=${COMP_WORDS[0]}
+  local values=
+  local optionCompleted=1
+
+  #echo -e "\nArgs=[$@]\nProgram: [$program]\nPrev - Cur = [$prev] - [$cur]"
+
+  # Get the completion for the option
+  if [[ $prev == -* ]]
+  then 
+      values=$(completer --program $program  --complete $prev)
+      optionCompleted=0
+  fi
+
+  if [[ $optionCompleted = 1 ]] || [[ $? > 2 ]]
+  then
+    # There is no completion for the option
+    case $cur in
+    -*) values=$(completer --program $program --complete-options) ;;
+    *) values=$(completer --program $program --complete-actions) ;;
+    esac
+  fi
+    
+  COMPREPLY=( $( compgen -W "$values" -- $cur ) )
+  return 0
+}
+
+# Scripts to complete
+# complete -F __completer completer # program:completer
+complete -F __completer chatter # program:chatter

@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+#echo -e "Call to $0 with [$@]"
+
+source $HOME/.completer/completer-lib.sh
+
+readonly longOptions='program:,register:,unregister:,record:,record-options,record-actions,complete:,complete-actions,complete-options,get:,get-options,get-actions'
+readonly shortOptions=''
+
+args=$(getopt -s bash -o "$shortOptions" -l "$longOptions" -- "$@")
+
+if [ $? -ne 0 ] 
+then
+  echo -e "\e[031mError on parameters\e[0m"
+  exit 1
+fi
+
+# parse option
+eval set -- "$args"
+
+while true
+do
+  option="$1"
+  shift 1
+  case $option in
+    # environment
+    --program) 
+      program="$1"
+      shift 1 ;;
+    --[a-z]*-[a-z]*)
+      mode=${option%-[a-z]*}
+      mode=${mode#--}
+      context="__${option//--[a-z]*-/}" ;;
+    --[a-z]*)
+      mode=${option#--}
+      context="$1"
+      shift 1 ;;
+    # end of loop and errors
+    --) break ;;
+    *) echo "Invalid option $option"
+  esac
+done
+
+# parse values
+case $mode in
+  record)
+    record $program $context "$@" ;;
+  complete)
+    doCompletion $program $context ;;
+  get)
+    getCompletion $program $context ;;
+  register) register $context;;
+  unregister) unregister $context;;
+  *)
+    echo "Error: invalid mode '$mode'"
+    exit 2;
+esac
+
+exit 0
