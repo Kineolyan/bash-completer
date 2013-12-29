@@ -22,17 +22,18 @@ local optionCompleted=1
 # Get the completion for the option
 if [[ $prev == -* ]]
 then
-values=$(completer --program $program --complete $prev)
-optionCompleted=0
+  values=$(completer --program $program --complete $prev)
+  completionCode=$?
+  optionCompleted=0
 fi
 
-if [[ $optionCompleted = 1 ]] || [[ $? > 2 ]]
+if [[ $optionCompleted = 1 ]] || [[ $completionCode > 2 ]]
 then
 # There is no completion for the option
-case $cur in
--*) values=$(completer --program $program --complete-options) ;;
-*) values=$(completer --program $program --complete-actions) ;;
-esac
+  case $cur in
+  -*) values=$(completer --program $program --complete-options) ;;
+  *) values=$(completer --program $program --complete-actions) ;;
+  esac
 fi
 
 COMPREPLY=( $( compgen -W "$values" -- $cur ) )
