@@ -25,7 +25,7 @@
 if [[ "$@" == *--__complete* ]]
 then
   readonly __completer_longOpts="__complete:,__stream:"
-  __completer_args=$(getopt -qs bash -o '' -l "$__completer_longOpts" -- "$@")
+  readonly __completer_args=$(getopt -qs bash -o '' -l "$__completer_longOpts" -- "$@")
 
   if [ $? -eq 0 ]
   then
@@ -40,7 +40,8 @@ then
       shift 2
     done
     
-    complete$__context $__stream 2> /dev/null
-    exit $?
+    __complete$__context $__stream 2> /dev/null
+    readonly __completer_completionCode=$?
+    [[ $__completer_completionCode != 127 ]] && exit $__completer_completionCode || exit 4
   fi
 fi
