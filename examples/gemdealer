@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+
+require '~/.completer/lib/completer-util'
+
+# Checks if completion must be refreshed
+# Params:
+# * stream stream containing the previous completion values, or '' if stream does not already exist
+# Completion values are printed
+# Returns:
+#  0 if the values are up-to-date
+#  1 if new values are set, these values are echoed
+#  2 if there is no need to store the values, these values are echoed
+#  3 if there is no completion
+Completer::Completer.new do 
+  complete '-l', '--language' do |stream|
+    next 2, "geek", "francais", "anglais", "cowboy" 
+  end
+
+  complete '-n', '--number' do |stream|
+    next 1, 1, 5, 10 
+  end
+end
+
+puts "Salut vieux ! Tu veux des belles gems ?"
+exit 0
