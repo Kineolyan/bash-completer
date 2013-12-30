@@ -11,6 +11,7 @@ module Completer
       @aliases = {}
   
       instance_eval(&definitions)
+      collect_options
   
       exit do_completion
     end
@@ -18,12 +19,26 @@ module Completer
     def completion_phase?
       ARGV.find_index "--__complete"
     end
+
+    ACTIONS_KEY = "__actions"
+    def complete_actions &action
+      @completions[ACTIONS_KEY] = action
+      @aliases[ACTIONS_KEY] = ACTIONS_KEY
+    end
   
-    def complete *values, &action
+    def complete_options *values, &action
       raise ArgumentError.new "Invalid empty array of options" unless values && values.size > 0
   
       @completions[values.first] = action
       values.each { |option| @aliases[option] = values.first }
+    end
+
+    OPTIONS_KEY = '__options'
+    def collect_options
+      @aliases[OPTIONS_KEY] = OPTIONS_KEY
+      @completions[OPTIONS_KEY] = lambda { |stream|
+        return 1, *(@aliases.keys)
+      }
     end
   
     def do_completion
@@ -59,10 +74,7 @@ module Completer
     end
 
     def uncased_context value
-      uncased_value = value.dup
-      2.times { |i| uncased_value[i] = '-' if value[i] == '@' }
-
-      uncased_value
+      value.dup.gsub /@/, '-'
     end
   
   end
