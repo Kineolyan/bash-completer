@@ -41,7 +41,7 @@ return 0
 }
 
 # Scripts to complete
-# complete -F __completer completer # program:completer
+complete -F __completer completer # program:completer
 
 PROGRAM_FILE="$HOME/.completer/__registered-programs"
 [ -e $PROGRAM_FILE ] && source $PROGRAM_FILE

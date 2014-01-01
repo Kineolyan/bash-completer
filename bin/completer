@@ -2,13 +2,35 @@
 
 #echo -e "Call to $0 with [$@]"
 
-source $HOME/.completer/completer-lib.sh
-
 readonly longOptions='program:,register:,unregister:,record:,record-options,record-actions,complete:,complete-actions,complete-options,get:,get-options,get-actions'
 readonly shortOptions=''
 
-args=$(getopt -s bash -o "$shortOptions" -l "$longOptions" -- "$@")
+convertOptions() {
+  local readonly prefix="$1"
+  local value="$2"
+  [ -z $value ] && return
 
+  value="${value//::,/ $prefix}"
+  value="${value//:,/ $prefix}"
+  value="${value//,/ $prefix}"
+
+  echo "${prefix}${value}"
+}
+
+__complete__options() {
+  local readonly stream="$1"
+  [ $stream -nt "$(which $0)" ] && return 0  
+  
+  convertOptions '--' $longOptions
+  convertOptions '-' $shortOptions
+
+  return 1
+}
+
+source $HOME/.completer/lib/completer-util.sh
+source $HOME/.completer/completer-lib.sh
+
+readonly args=$(getopt -s bash -o "$shortOptions" -l "$longOptions" -- "$@")
 if [ $? -ne 0 ] 
 then
   echo -e "\e[031mError on parameters\e[0m"
