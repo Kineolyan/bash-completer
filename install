@@ -43,7 +43,7 @@ installationList=$(checkDependencies)
 
 if [ -n "$installationList" ]
 then
-  echoPackageList "\e[33mbash-completer requires the following packages to work:" "\e[0m" $installationList
+  echoPackageList "\e[33mbash-completer requires the following packages to work:" "\e[0m\nTo resume installation, go to ~/.bash-completer and execute ./install" $installationList
 else
   echo -e "\e[32mAll dependencies are present\e[0m"
 fi

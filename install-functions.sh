@@ -61,7 +61,7 @@ uninstall() {
 
 usage() {
   cat <<USAGE
-Usage: ./install.sh [options]
+Usage: ./install [options]
 Options:
   -h --help     prints this message
   --notes       prints installation notes
@@ -79,7 +79,7 @@ Otherwise, the program will stop to work.
 
 To uninstall this, go to ~/.bash-completer and execute th uninstaller
 cd ~/.bash-completer
-./uninstall.sh
+./uninstall
 
 Up to now, there is no system to update automatically your version of bash-completer.
 Just uninstall and reinstall everything if a newer version comes up.

@@ -34,7 +34,7 @@ uninstall
 echo -en "\e[34m"
 cat <<NOTES
 bash-completer in now uninstalled.
-If you ever want to re-install it, you can always execute ./install.sh
+If you ever want to re-install it, you can always execute ./install
 
 You can now remove the folder ~/.bash-completer.
 
