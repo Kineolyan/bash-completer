@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require '~/.completer/lib/completer-util'
+require '~/.bash-completer/lib/completer-util'
 
 # Checks if completion must be refreshed
 # Params:
@@ -11,17 +11,17 @@ require '~/.completer/lib/completer-util'
 #  1 if new values are set, these values are echoed
 #  2 if there is no need to store the values, these values are echoed
 #  3 if there is no completion
-Completer::Completer.new do 
+Completer::Completer.new do
   complete_actions do |stream|
     next 1, "chouchou", "olivier", "colombe"
   end
 
   complete_options '-l', '--language' do |stream|
-    next 2, "geek", "francais", "anglais", "cowboy" 
+    next 2, "geek", "francais", "anglais", "cowboy"
   end
 
   complete_options '-n', '--number' do |stream|
-    next 1, 1, 5, 10 
+    next 1, 1, 5, 10
   end
 end
 
