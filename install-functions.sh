@@ -38,6 +38,20 @@ echoPackageList () {
   return 0
 }
 
+COMPLETION_SCRIPT=/etc/bash_completion.d/bash-completer
+COMPLETION_BINARY=/usr/bin/bash-completer
+install() {
+  sudo ln -s $PWD/__completer $COMPLETION_SCRIPT
+  sudo ln -s $PWD/bin/bash-completer $COMPLETION_BINARY
+
+  # reload the completion file to reset the environment
+  bashOptions=$-
+  set +e
+  source $COMPLETION_SCRIPT
+  [[ "$bashOptions" == *e* ]] && set -e
+
+  return 0
+}
 usage() {
   cat <<USAGE
 Usage: ./install.sh [options]

@@ -73,18 +73,18 @@ Installation of bash-completer
 This step requires root privileges. It will
 * install the completion commands in /etc/bash_completion.d
 * install the completer binary in /usr/bin
+
 MSG
 while true
 do
   echo -n "Continue the installation [Y/n] "
-  read -n 1 continueInstallation
-  echo ""
+  read continueInstallation
 
   if [ "$continueInstallation" == "n" ] || [ "$continueInstallation" == "N" ]
   then
     echo "Thanks for your participation. Retry when you want."
     exit 0
-  elif [ "$continueInstallation" == "y" ] || [ "$continueInstallation" == "Y" ]
+  elif [ -z "$continueInstallation" ] || [ "$continueInstallation" == "y" ] || [ "$continueInstallation" == "Y" ]
   then
     break
   else
@@ -92,12 +92,11 @@ do
     ## loop again
   fi
 done
+echo ""
 
-sudo ln -s $PWD/__completer /etc/bash_completion.d/bash-completer
-sudo ln -s $PWD/bin/bash-completer /usr/bin/
-
-# reload the completion file to reset the environment
-source /etc/bash_completion.d/bash-completer
+install
 
 echo ""
 echoNotes
+
+exit 0
