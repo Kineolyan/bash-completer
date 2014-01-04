@@ -94,7 +94,10 @@ do
 done
 
 sudo ln -s $PWD/__completer /etc/bash_completion.d/bash-completer
-sudo ln -s $PWD/bin/completer /usr/bin/
+sudo ln -s $PWD/bin/bash-completer /usr/bin/
+
+# reload the completion file to reset the environment
+source /etc/bash_completion.d/bash-completer
 
 echo ""
 echoNotes
