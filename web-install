@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -e
+
+VERSION="v0.9"
+PROJECT_ROOT="$HOME/.bash-completer"
+
+# Stop if the program is already present
+if [ -e $PROJECT_ROOT ]
+then
+  echo -e "\e[31mThere is already a bash-completer project present on your computer (in $PROJECT_ROOT).\nRemove it before retrying this installation.\e[0m"
+  exit 0
+fi
+
+mkdir -p "$PROJECT_ROOT"
+cd "$PROJECT_ROOT"
+
+# Download the requested version of rbenv-ruby-install
+
+echo "*** Downloading bash-completer $VERSION ***"
+curl -skSfL "https://github.com/Kineolyan/bash-completer/archive/${VERSION}.tar.gz" | tar xz -m --strip 1
+
+# Launch the installer
+./install
