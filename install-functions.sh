@@ -52,6 +52,13 @@ install() {
 
   return 0
 }
+
+uninstall() {
+  sudo rm -f $COMPLETION_SCRIPT $COMPLETION_BINARY
+
+  return 0
+}
+
 usage() {
   cat <<USAGE
 Usage: ./install.sh [options]
