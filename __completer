@@ -8,6 +8,7 @@
 # End:
 # ex: ts=2 sw=2 et filetype=sh
 
+COMPLETION_TOOL=bash-completer
 __completer() {
 COMPREPLY=()
 local argc=${COMP_CWORD}
@@ -22,7 +23,7 @@ local optionCompleted=1
 # Get the completion for the option
 if [[ $prev == -* ]]
 then
-  values=$(completer --program $program --complete $prev)
+  values=$($COMPLETION_TOOL --program $program --complete $prev)
   completionCode=$?
   optionCompleted=0
 fi
@@ -31,8 +32,8 @@ if [[ $optionCompleted = 1 ]] || [[ $completionCode > 2 ]]
 then
 # There is no completion for the option
   case $cur in
-  -*) values=$(completer --program $program --complete-options) ;;
-  *) values=$(completer --program $program --complete-actions) ;;
+  -*) values=$($COMPLETION_TOOL --program $program --complete-options) ;;
+  *) values=$($COMPLETION_TOOL --program $program --complete-actions) ;;
   esac
 fi
 
@@ -41,7 +42,7 @@ return 0
 }
 
 # Scripts to complete
-complete -F __completer completer # program:completer
+complete -F __completer $COMPLETION_TOOL # program:completer
 
 PROGRAM_FILE="$HOME/.completer/__registered-programs"
 [ -e $PROGRAM_FILE ] && source $PROGRAM_FILE

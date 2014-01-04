@@ -19,19 +19,19 @@ convertOptions() {
 
 __complete__options() {
   local readonly stream="$1"
-  [ $stream -nt "$(which $0)" ] && return 0  
-  
+  [ $stream -nt "$(which $0)" ] && return 0
+
   convertOptions '--' $longOptions
   convertOptions '-' $shortOptions
 
   return 1
 }
 
-source $HOME/.completer/lib/completer-util.sh
-source $HOME/.completer/completer-lib.sh
+source $HOME/.bash-completer/lib/completer-util.sh
+source $HOME/.bash-completer/completer-lib.sh
 
 readonly args=$(getopt -s bash -o "$shortOptions" -l "$longOptions" -- "$@")
-if [ $? -ne 0 ] 
+if [ $? -ne 0 ]
 then
   echo -e "\e[031mError on parameters\e[0m"
   exit 1
@@ -46,7 +46,7 @@ do
   shift 1
   case $option in
     # environment
-    --program) 
+    --program)
       program="$1"
       shift 1 ;;
     --[a-z]*-[a-z]*)

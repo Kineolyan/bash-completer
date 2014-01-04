@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-readonly COMPLETION_FOLDER=$HOME/.completer
+readonly COMPLETION_FOLDER=$HOME/.bash-completer
 readonly PROGRAMS_FOLDER=$COMPLETION_FOLDER/programs
 
 # create the appropriate env for the completion system
@@ -73,8 +73,8 @@ getCompletion() {
   local readonly context="$2"
 
   local readonly stream="$(getStream $program $context)"
-  if [ -e $stream ] 
-  then 
+  if [ -e $stream ]
+  then
     cat $stream
     return 0
   else
@@ -137,7 +137,7 @@ unregister() {
     [[ $clearFile = 0 ]] && clearFile=1 && > $REGISTRATION_FILE
     echo $line >> $REGISTRATION_FILE
   done < <(grep -vE "^.*# program:${program}$" $REGISTRATION_FILE)
-  
+
   return 0
 }
 

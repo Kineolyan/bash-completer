@@ -10,23 +10,23 @@
 #  3 if there is no completion
 __complete__options() {
   local readonly stream="$1"
-  [ $stream -nt "$(which $0)" ] && return 0  
-  
+  [ $stream -nt "$(which $0)" ] && return 0
+
   echo -l --language -p --greetings
   return 1
 }
 
 __complete__actions() {
   local readonly stream="$1"
-  [ $stream -nt "$(which $0)" ] && return 0  
-  
+  [ $stream -nt "$(which $0)" ] && return 0
+
   echo "saluer moquer remercier"
   return 1
 }
 
 __complete@l() {
   local readonly stream="$1"
-  [ $stream -nt "$(which $0)" ] && return 0  
+  [ $stream -nt "$(which $0)" ] && return 0
 
   echo francais english espanol
   return 1
@@ -48,7 +48,7 @@ __complete@p() {
 ##  return 3
 ##}
 
-source $HOME/.completer/lib/completer-util.sh
+source $HOME/.bash-completer/lib/completer-util.sh
 
 ## PROGRAM PART ##
 readonly shortOpts=l:,p:
