@@ -44,5 +44,5 @@ return 0
 # Scripts to complete
 complete -F __completer $COMPLETION_TOOL # program:completer
 
-PROGRAM_FILE="$HOME/.completer/__registered-programs"
+PROGRAM_FILE="$HOME/.bash-completer/__registered-programs"
 [ -e $PROGRAM_FILE ] && source $PROGRAM_FILE
