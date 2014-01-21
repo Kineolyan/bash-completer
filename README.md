@@ -117,7 +117,7 @@ We will describe above the rules for create completion functions for each langua
 #### Bash
 The bash script to complete will look for specific functions to get the completion done.
 These functions are meant to be called by the library, located in <path to bash-completer>/lib/completer-util.sh.
-This script must be added after the definition of the method. It will capture the request for completion and exists the script after the completion is done. For other requests, it will have no effect.
+This script must be added after the definition of the method. It will capture the request for completion and exists the script after the completion is done. For other requests, it will have no effect. A call of the script for completion is detected testing if **"--__complete"** is one of the arguments provided to the script.
 
 This is the list of functions to do the completion:
 * **for actions**: \_\_complete_actions
@@ -152,7 +152,49 @@ source '~/.bash-completer/lib/completer-lib.sh'
 For more examples, see the examples/ folder.
 
 ### Ruby
-A class all the work in ruby.
+In ruby, we create a whole class to handle all the completion.
+This class is named Completer, in the module Completer, located in ~/.bash-completer/lib/completer-lib.rb.
+Within the class constructor, you will define the options to monitor and the actions availables.
+By the end of the constructor, it will look for completion requests. If there are, they will be treated and the program will exit. Otherwise, the program will continue normally.
+
+The class contains two methods:
+* **actions(&block)**, that receive a block for completion as parameter
+* **options(value1, value2, ..., &block)**, that receive the options for completion as parameters and a block for the completion of these options.
+
+Both blocks will receive one parameter a File object refering to the stream in which previous completion values are stored, or null if there is no file yet. They must return first the code for completion, then the values.
+
+Completion code are defined as following:
+* 0 if the values are up-to-date
+* 1 if new values are set, these values are echoed
+* 2 if there is no need to store the values, these values are echoed
+* 3 if there is no completion
+
+All work for completion is done in the constructor for the class. It accepts a block executed in the context of the newly created object. In this, you will define your actions and options. This configuration is then recorded.
+
+Before ending the initialization, the instance will test if completion is required from the script. As for bash, a call for completion is detected if ARGV contains **"--__complete"**
+
+This is a basic sketch of a ruby program adapted for completion
+
+~~~ruby
+require '~/.bash-completer/lib/completer-util'
+
+Completer::Completer.new do
+  complete_actions do |stream|
+    next 1, "me", "you", "others"
+  end
+
+  complete_options '-l', '--language' do |stream|
+    next 2, "geek", "francais", "anglais", "cowboy"
+  end
+
+  complete_options '-n', '--number' do |stream|
+    next 1, 1, 5, 10
+  end
+end
+
+## The rest of your script
+...
+~~~
 
 For more examples, see the examples/ folder.
 
@@ -176,7 +218,6 @@ bash-completion has been tested and reported as working under the following vers
 
 Licence
 -------
-
 This is released under a MIT licence. You can use it at will, just
 notify me if so. I'm always interested in your returns and advices.
 
