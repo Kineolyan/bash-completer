@@ -7,7 +7,7 @@ def completeActions(stream):
   return 1, [ "greet", "share", "leave" ]
 
 def completeRepetition(stream):
-  if os.path.getmtime(stream) > os.path.getmtime(__file__):
+  if cu.isNewer(stream):
     return 0
 
   return 1, [ "random", "once", "few" ]

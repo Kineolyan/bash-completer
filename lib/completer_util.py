@@ -3,6 +3,15 @@
 import sys
 import os.path
 
+def isNewer(stream):
+  """ Decides if your script is more recent than the given stream
+  Params: stream path to the file to compare
+  """
+  if not op.path.exists(stream):
+    return False
+
+  return os.path.getmtime(stream) > os.path.getmtime(__file__)
+
 class Completer:
 
   def __init__(self):
@@ -37,7 +46,7 @@ class Completer:
 
   def optionsCompletionMethod(self):
     def callback(stream):
-      if os.path.getmtime(stream) > os.path.getmtime(__file__):
+      if isNewer(stream):
         return 0
 
       return 1, self._aliases.keys()
