@@ -1,0 +1,82 @@
+# Util for completion in ruby scripts
+
+import sys
+import os.path
+
+class Completer:
+
+  def __init__(self):
+    self._completions = {}
+    self._aliases = {}
+
+  @staticmethod
+  def hasCompletionCall():
+    return "--__complete" in sys.argv
+
+  ACTIONS_KEY = "__actions"
+  def completeActions(self, action):
+    self._completions[self.ACTIONS_KEY] = action
+    self._aliases[self.ACTIONS_KEY] = self.ACTIONS_KEY
+
+    return self
+
+  def completeOptions(self, options, action):
+    if len(options) == 0:
+      raise ValueError("Invalid empty array of options")
+
+    self._completions[options[0]] = action
+    for option in options:
+      self._aliases[option] = options[0]
+
+    return self
+
+  OPTIONS_KEY = "__options"
+  def collectOptions(self):
+    self._aliases[self.OPTIONS_KEY] = self.OPTIONS_KEY
+    self._completions[self.OPTIONS_KEY] = self.optionsCompletionMethod()
+
+  def optionsCompletionMethod(self):
+    def callback(stream):
+      if os.path.getmtime(stream) > os.path.getmtime(__file__):
+        return 0
+
+      return 1, self._aliases.keys()
+
+    return callback
+
+  def doCompletion(self):
+    if not self.hasCompletionCall():
+      return
+
+    self.collectOptions()
+
+    self.parseArguments()
+
+    # Get the appropriate action
+    if not self._completionKey or not self._completionKey in self._completions:
+      exit(3)
+
+    completionAction = self._completions[self._completionKey]
+
+    exit_code, values = completionAction(self._stream)
+    print " ".join(values)
+
+    exit(exit_code)
+
+  def parseArguments(self):
+    i = 0
+    while i < len(sys.argv):
+      arg = sys.argv[i]
+      if "--__complete" == arg:
+        context = self.uncasedContext(sys.argv[i + 1])
+        self._completionKey = self._aliases[context] if context in self._aliases else None
+        i += 2
+      elif "--__stream" == arg:
+        self._stream = sys.argv[i + 1]
+        i += 2
+      else:
+        i += 1
+
+  @staticmethod
+  def uncasedContext(value):
+    return value.replace('@', '-')
