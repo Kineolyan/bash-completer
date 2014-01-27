@@ -49,7 +49,11 @@ class Completer:
       if isNewer(stream):
         return 0
 
-      return 1, self._aliases.keys()
+      keys = self._aliases.keys()
+      keys.remove(self.ACTIONS_KEY)
+      keys.remove(self.OPTIONS_KEY)
+
+      return 1, keys
 
     return callback
 
