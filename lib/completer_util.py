@@ -58,23 +58,29 @@ class Completer:
     return callback
 
   def doCompletion(self):
-    if not self.hasCompletionCall():
-      return
+    try:
+      if not self.hasCompletionCall():
+        # Do nothing for completion, let the program run
+        return
 
-    self.collectOptions()
+      self.collectOptions()
 
-    self.parseArguments()
+      self.parseArguments()
 
-    # Get the appropriate action
-    if not self._completionKey or not self._completionKey in self._completions:
-      exit(3)
+      # Get the appropriate action
+      if not self._completionKey or not self._completionKey in self._completions:
+        exit(3)
 
-    completionAction = self._completions[self._completionKey]
+      completionAction = self._completions[self._completionKey]
 
-    exit_code, values = completionAction(self._stream)
-    print " ".join(values)
+      exit_code, values = completionAction(self._stream)
+      print " ".join(values)
 
-    exit(exit_code)
+      exit(exit_code)
+    except Exception, e:
+      exit(4)
+
+
 
   def parseArguments(self):
     i = 0
