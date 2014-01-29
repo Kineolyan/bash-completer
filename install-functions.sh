@@ -74,6 +74,10 @@ cat <<NOTES
 Bravo ! The installation is complete.
 You can now start to register programs for completion.
 
+To help you in your programming, we advise you to add the following variables to your environment.
+>> PYTHONPATH=\$PYTHONPATH:\$HOME/.bash-completer/lib
+>> RUBYLIB=\$RUBYLIB:\$HOME/.bash-completer/lib
+
 The bash-completer has been installed in ~/.bash-completer. It's important that you do not move it to another location.
 Otherwise, the program will stop to work.
 
