@@ -2,12 +2,13 @@
 
 import sys
 import os.path
+## import traceback
 
 def isNewer(stream):
   """ Decides if your script is more recent than the given stream
   Params: stream path to the file to compare
   """
-  if not op.path.exists(stream):
+  if not os.path.exists(stream):
     return False
 
   return os.path.getmtime(stream) > os.path.getmtime(__file__)
@@ -73,14 +74,20 @@ class Completer:
 
       completionAction = self._completions[self._completionKey]
 
-      exit_code, values = completionAction(self._stream)
-      print " ".join(values)
+      completionResult = completionAction(self._stream)
+      if type(completionResult) is tuple:
+        exit_code, values = completionAction(self._stream)
+        parint " ".join(values)
+      elif type(completionResult) is int:
+        exit_code = completionResult
+      else:
+        exit_code = 4
 
       exit(exit_code)
-    except Exception, e:
+    except Exception as e:
+##      print e
+##      traceback.print_exc()
       exit(4)
-
-
 
   def parseArguments(self):
     i = 0
@@ -99,3 +106,4 @@ class Completer:
   @staticmethod
   def uncasedContext(value):
     return value.replace('@', '-')
+
