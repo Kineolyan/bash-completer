@@ -83,7 +83,7 @@ class Completer:
       completionResult = completionAction(self._stream)
       if type(completionResult) is tuple:
         exit_code, values = completionAction(self._stream)
-        parint " ".join(values)
+        print " ".join(values)
       elif type(completionResult) is int:
         exit_code = completionResult
       else:
