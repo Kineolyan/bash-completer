@@ -40,6 +40,12 @@ class Completer:
 
     return self
 
+  VOID_OPTION = lambda(stream): 2
+  def registerOptions(self, options):
+    for option in options:
+      self._aliases[option] = option
+      self._completions[option] = self.VOID_OPTION
+
   OPTIONS_KEY = "__options"
   def collectOptions(self):
     self._aliases[self.OPTIONS_KEY] = self.OPTIONS_KEY
