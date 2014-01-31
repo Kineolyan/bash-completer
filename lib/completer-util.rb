@@ -2,6 +2,16 @@
 
 module Completer
 
+  def self.is_newer? stream
+    begin
+      File.open($0) do |this_script|
+        return this_script.mtime < file.mtime
+      end
+    rescue
+      return false
+    end
+  end
+
   class Completer
 
     def initialize &definitions
