@@ -47,7 +47,13 @@ module Completer
     def collect_options
       @aliases[OPTIONS_KEY] = OPTIONS_KEY
       @completions[OPTIONS_KEY] = lambda { |stream|
-        return 1, *(@aliases.keys)
+        return 0 if BashCompleter::is_newer? stream
+
+        options  = @aliases.keys
+        options.delete ACTIONS_KEY
+        options.delete OPTIONS_KEY
+
+        return 1, *options
       }
     end
 
