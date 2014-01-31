@@ -1,6 +1,6 @@
 # Util for completion in ruby scripts
 
-module Completer
+module BashCompleter
 
   def self.is_newer? stream
     begin
