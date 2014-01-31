@@ -10,35 +10,37 @@
 
 COMPLETION_TOOL=bash-completer
 __completer() {
-COMPREPLY=()
-local argc=${COMP_CWORD}
-local cur=${COMP_WORDS[$argc]}
-local prev=${COMP_WORDS[$argc-1]}
-local program=${COMP_WORDS[0]}
-local values=
-local optionCompleted=1
+  # set -x
+  COMPREPLY=()
+  local argc=${COMP_CWORD}
+  local cur=${COMP_WORDS[$argc]}
+  local prev=${COMP_WORDS[$argc-1]}
+  local program=${COMP_WORDS[0]}
+  local values=
+  local optionCompleted=1
 
-#echo -e "nArgs=[$@]nProgram: [$program]nPrev - Cur = [$prev] - [$cur]"
+  #echo -e "nArgs=[$@]nProgram: [$program]nPrev - Cur = [$prev] - [$cur]"
 
-# Get the completion for the option
-if [[ $prev == -* ]]
-then
-  values=$($COMPLETION_TOOL --program $program --complete $prev)
-  completionCode=$?
-  optionCompleted=0
-fi
+  # Get the completion for the option
+  if [[ $prev == -* ]]
+  then
+    values=$($COMPLETION_TOOL --program $program --complete $prev)
+    completionCode=$?
+    optionCompleted=0
+  fi
 
-if [[ $optionCompleted = 1 ]] || [[ $completionCode > 2 ]]
-then
-# There is no completion for the option
-  case $cur in
-  -*) values=$($COMPLETION_TOOL --program $program --complete-options) ;;
-  *) values=$($COMPLETION_TOOL --program $program --complete-actions) ;;
-  esac
-fi
+  if [[ $optionCompleted = 1 ]] || [[ $completionCode > 2 ]]
+  then
+  # There is no completion for the option
+    case $cur in
+    -*) values=$($COMPLETION_TOOL --program $program --complete-options) ;;
+    *) values=$($COMPLETION_TOOL --program $program --complete-actions) ;;
+    esac
+  fi
 
-COMPREPLY=( $( compgen -W "$values" -- $cur ) )
-return 0
+  COMPREPLY=( $( compgen -W "$values" -- $cur ) )
+  # set +x
+  return 0
 }
 
 # Scripts to complete
