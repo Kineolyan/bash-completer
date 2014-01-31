@@ -41,6 +41,15 @@ module Completer
       }
     end
 
+    @@VOID_OPTION = lambda { |stream| next 3 }
+    def register_options *options
+      complete_options *options, &@@VOID_OPTION
+      # options.each do |option|
+      #   @aliases[option] = option
+      #   @completions[option] = @@VOID_OPTION
+      # end
+    end
+
     def do_completion
       parse_arguments
 
