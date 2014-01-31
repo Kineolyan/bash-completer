@@ -1,0 +1,57 @@
+#!/bin/bash
+set -e
+
+[ ! -e install-functions.sh ] && echo -e "\e[31mThe installer must be started from bash-completer directory.\e[0m" && exit 1
+
+readonly ROOT_DIR=$(pwd)
+readonly TARGET_DIR="$HOME/.bash-completer"
+
+if [[ $1 == "fast" ]]
+then
+  if [ -d "$TARGET_DIR" ]
+  then
+    # Import the project
+    cp -R * "$TARGET_DIR"
+  else
+    mkdir -p "$TARGET_DIR"
+
+    # Import the project
+    cp -R * "$TARGET_DIR"
+
+    # Install
+    cd $TARGET_DIR
+    ./install
+  fi
+
+else
+  readonly TEMP_DIR="/tmp/bash-completer@save-$(date +%Y%m%d+%H%M)"
+
+  # Prepare the target folder
+  if [ -d "$TARGET_DIR" ]
+  then
+    cd "$TARGET_DIR"
+
+    # Save some data
+    mkdir -p "$TEMP_DIR"
+    cp -R __registered-programs "$TEMP_DIR"
+
+    # Clean
+    ./uninstall
+    rm -r "$TARGET_DIR"/*
+
+    cd "$ROOT_DIR"
+  else
+    mkdir -p "$TARGET_DIR"
+  fi
+
+  # Import the project
+  cp -R * "$TARGET_DIR"
+
+  # Install
+  cd $TARGET_DIR
+  ./install
+
+  # Restore previous files
+  cp -R "$TEMP_DIR"/* .
+  rm -rf "$TEMP_DIR"
+fi

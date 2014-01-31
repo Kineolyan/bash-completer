@@ -1,5 +1,8 @@
 programs/
-__registered-programs 
+__registered-programs
 
 # Edition files
 *.swp
+
+# Compiled files
+*.pyc

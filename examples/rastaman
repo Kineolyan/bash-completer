@@ -1,0 +1,24 @@
+#!/usr/bin/env python
+
+import completer_util as cu
+
+def completeActions(stream):
+  return 1, [ "greet", "share", "leave" ]
+
+def completeRepetition(stream):
+  if cu.isNewer(stream):
+    return 0
+
+  return 1, [ "random", "once", "few" ]
+
+def completeName(stream):
+  return 2, [ "brother", "man" ]
+
+completer = cu.Completer()
+completer.completeActions(completeActions)
+completer.completeOptions(["-r", "--repeat"], completeRepetition)
+completer.completeOptions(["-n", "--name"], completeName)
+completer.registerOptions([ "-a", "--abort" ])
+completer.doCompletion()
+
+print "Hello man"
