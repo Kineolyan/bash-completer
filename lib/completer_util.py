@@ -2,7 +2,7 @@
 
 import sys
 import os.path
-## import traceback
+# import traceback
 
 def isNewer(stream):
   """ Decides if your script is more recent than the given stream
@@ -91,9 +91,9 @@ class Completer:
 
       exit(exit_code)
     except Exception as e:
-##      print e
-##      traceback.print_exc()
-      exit(4)
+     # print e
+     # traceback.print_exc()
+     exit(4)
 
   def parseArguments(self):
     i = 0
