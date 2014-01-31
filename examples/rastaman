@@ -19,6 +19,7 @@ completer = cu.Completer()
 completer.completeActions(completeActions)
 completer.completeOptions(["-r", "--repeat"], completeRepetition)
 completer.completeOptions(["-n", "--name"], completeName)
+completer.registerOptions([ "-a", "--abort" ])
 completer.doCompletion()
 
 print "Hello man"
