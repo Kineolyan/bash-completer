@@ -88,7 +88,7 @@ To add a program for completion, you use the following command:
 $ bash-completer --register my_prog
 ~~~
 
-From now on, every time you will type my_prog and hit <Tab>, the system of bash-completer will try to do completion on your script.
+From now on, every time you will type my_prog and hit &lt;Tab&gt;, the system of bash-completer will try to do completion on your script.
 
 To unregister your application, use the opposite command:
 
@@ -115,8 +115,8 @@ We will describe above the rules for create completion functions for each langua
 
 ### Complete documentation
 #### Bash
-The bash script to complete will look for specific functions to get the completion done.
-These functions are meant to be called by the library, located in <path to bash-completer>/lib/completer-util.sh.
+The bash script to complete will look for specific functions to get the completion done.  
+These functions are meant to be called by the library, located in &lt;path to bash-completer&gt;/lib/completer-util.sh.  
 This script must be added after the definition of the method. It will capture the request for completion and exists the script after the completion is done. For other requests, it will have no effect. A call of the script for completion is detected testing if **"--__complete"** is one of the arguments provided to the script.
 
 This is the list of functions to do the completion:
@@ -152,9 +152,9 @@ source '~/.bash-completer/lib/completer-lib.sh'
 For more examples, see the examples/ folder.
 
 ### Ruby
-In ruby, we create a whole class to handle all the completion.
+In ruby, we create a whole class to handle all the completion.  
 This class is named Completer, in the module Completer, located in ~/.bash-completer/lib/completer-lib.rb.
-Within the class constructor, you will define the options to monitor and the actions availables.
+Within the class constructor, you will define the options to monitor and the actions availables.  
 By the end of the constructor, it will look for completion requests. If there are, they will be treated and the program will exit. Otherwise, the program will continue normally.
 
 The class contains two methods:
@@ -198,6 +198,66 @@ end
 
 For more examples, see the examples/ folder.
 
+### Python
+Python is supported through a module **completer_util**. This contains only a helper, that will help you define your completion options and actions. There is an additional function that will help you write your completion functions.
+
+The class for completion is named Completer. Its constructor does not take any value.  
+Once the object created, you can register functions that will completion your options, or just register options if they do not have any completion.  
+Once all the completion program done, you will have to call the method doCompletion to activate the helper. This method will return if the program is not called for completion, or exit otherwise, once the completion handled.
+
+Completer methods are the following:
+* **__init()**: constructor of the class
+* **completeAction(action)**: it registers a function called to complete the action of the program
+* **completeOptions(options, action)**: it registers a array of options (param _options_) that will be completed a function (param _action_)
+* **registerOptions(options)**: method that takes an array of strings (param _options_) representing the options that do not expect completion.
+* **doCompletion()**: it will execute the completion.
+
+The functions to pass as action for completion receive one parameter, a string refering to the stream in which previous completion values are stored, or "" if there is no file yet. They must return first the code for completion, and an optional array containing the values for completion.
+
+Completion code are defined as following:
+* 0 if the values are up-to-date
+* 1 if new values are set, these values are echoed
+* 2 if there is no need to store the values, these values are echoed
+* 3 if there is no completion
+
+As for bash, Completer class will detect as call for completion if sys.args contains **"--__complete"**.
+
+Because you will often have to test if the stream containing the previous completion is newer or not than your own script, to update or not the completion values, the module completer_util comes with an additional function **isNewer**, that eases you the work.  
+**isNewer(path)** takes the path to a file and returns True if the file is newer than your script.
+
+This is a basic sketch of a python program adapted for completion.
+
+~~~python
+import completer_util as cu
+
+def completeActions(stream):
+  if cu.isNewer(stream):
+    return 0
+  
+  return 1, ["me", "you", "others"]
+  
+def completeLanguage(stream):
+  if cu.isNewer(stream):
+    return 0
+  
+  return 1, ["geek", "francais", "anglais", "cowboy"]
+  
+def completeNumber(stream):
+    next 2, [1, 5, 10]
+end
+
+completer = cu.Completer()
+complete_options(['-l', '--language'], completeLanguage)
+complete_options(['-l', '--language'], completeNumber)
+completer.registerOptions([ "-a", "--abort" ])
+completer.doCompletion()
+
+## The rest of your script
+...
+~~~
+
+For more examples, see the examples/ folder.
+
 Examples
 --------
 The examples directory contains some examples of the usage of bash-completer.
@@ -218,8 +278,7 @@ bash-completion has been tested and reported as working under the following vers
 
 Licence
 -------
-This is released under a MIT licence. You can use it at will, just
-notify me if so. I'm always interested in your returns and advices.
+This is released under a MIT licence. You can use it at will, just notify me if so. I'm always interested in your returns and advices.
 
 Known issues
 -----------
@@ -227,9 +286,6 @@ None up to now.
 
 Notes
 -----
-Python support is in the todo list. This is the next step on the
-roadmap.
-
 In the future, completion functions will receive previous arguments and values as a context for completion.
 This can be usefull for contextual completion such as:
 
