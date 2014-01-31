@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import completer_util as cu
-import os.path
 
 def completeActions(stream):
   return 1, [ "greet", "share", "leave" ]
