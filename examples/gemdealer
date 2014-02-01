@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require '~/.bash-completer/lib/completer-util'
+require 'completer-util'
 
 # Checks if completion must be refreshed
 # Params:
@@ -11,8 +11,10 @@ require '~/.bash-completer/lib/completer-util'
 #  1 if new values are set, these values are echoed
 #  2 if there is no need to store the values, these values are echoed
 #  3 if there is no completion
-Completer::Completer.new do
+BashCompleter::Completer.new do
   complete_actions do |stream|
+    next 0 if BashCompleter::is_newer? stream
+
     next 1, "chouchou", "olivier", "colombe"
   end
 
@@ -21,8 +23,12 @@ Completer::Completer.new do
   end
 
   complete_options '-n', '--number' do |stream|
+    next 0 if BashCompleter::is_newer? stream
+
     next 1, 1, 5, 10
   end
+
+  register_options "-a", "--abort", "-t", "--test", "-h", "--help"
 end
 
 puts "Salut vieux ! Tu veux des belles gems ?"

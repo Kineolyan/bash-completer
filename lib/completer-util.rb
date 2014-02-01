@@ -1,6 +1,16 @@
 # Util for completion in ruby scripts
 
-module Completer
+module BashCompleter
+
+  def self.is_newer? stream
+    begin
+      File.open($0) do |this_script|
+        return this_script.mtime < file.mtime
+      end
+    rescue
+      return false
+    end
+  end
 
   class Completer
 
@@ -37,8 +47,23 @@ module Completer
     def collect_options
       @aliases[OPTIONS_KEY] = OPTIONS_KEY
       @completions[OPTIONS_KEY] = lambda { |stream|
-        return 1, *(@aliases.keys)
+        return 0 if BashCompleter::is_newer? stream
+
+        options  = @aliases.keys
+        options.delete ACTIONS_KEY
+        options.delete OPTIONS_KEY
+
+        return 1, *options
       }
+    end
+
+    @@VOID_OPTION = lambda { |stream| next 3 }
+    def register_options *options
+      complete_options *options, &@@VOID_OPTION
+      # options.each do |option|
+      #   @aliases[option] = option
+      #   @completions[option] = @@VOID_OPTION
+      # end
     end
 
     def do_completion

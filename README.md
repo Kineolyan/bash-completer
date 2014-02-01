@@ -15,6 +15,7 @@ Table of contents
 * [Licence](#licence)
 * [Known issues](#known-issues)
 * [Notes](#notes)
+* [Changelog](#changelog)
 
 How it works
 ------------
@@ -157,9 +158,10 @@ This class is named Completer, in the module Completer, located in ~/.bash-compl
 Within the class constructor, you will define the options to monitor and the actions availables.  
 By the end of the constructor, it will look for completion requests. If there are, they will be treated and the program will exit. Otherwise, the program will continue normally.
 
-The class contains two methods:
-* **actions(&block)**, that receive a block for completion as parameter
-* **options(value1, value2, ..., &block)**, that receive the options for completion as parameters and a block for the completion of these options.
+The class contains the following methods:
+* **complete_actions(&block)**, that receive a block for completion as parameter
+* **complete_options(value1, value2, ..., &block)**, that receive the options for completion as parameters and a block for the completion of these options.
+* **register_options(value1, value2, ...)**, that only registers some options. No completion is expected for these options, they will only be available when listing possible options.
 
 Both blocks will receive one parameter a File object refering to the stream in which previous completion values are stored, or null if there is no file yet. They must return first the code for completion, then the values.
 
@@ -173,13 +175,17 @@ All work for completion is done in the constructor for the class. It accepts a b
 
 Before ending the initialization, the instance will test if completion is required from the script. As for bash, a call for completion is detected if ARGV contains **"--__complete"**
 
+BashCompleter module contains an additional method to help you check if your script is or not more recent than the file containing the saved completion values.  
+**BashCompleter::is_newer?(stream)** accepts the File object provided to your completion action. It returns _true_ if the given stream is newer than your script. Basically, in this case, you do not need to provide completion values and returns 0.
+
 This is a basic sketch of a ruby program adapted for completion
 
 ~~~ruby
 require '~/.bash-completer/lib/completer-util'
 
-Completer::Completer.new do
+BashCompleter::Completer.new do
   complete_actions do |stream|
+    next 0 if BashComplete::is_nezer? stream
     next 1, "me", "you", "others"
   end
 
@@ -188,6 +194,7 @@ Completer::Completer.new do
   end
 
   complete_options '-n', '--number' do |stream|
+    next 0 if BashComplete::is_nezer? stream
     next 1, 1, 5, 10
   end
 end
@@ -295,3 +302,14 @@ myprogram --country france --city p
 myprogram --country england --city l
 >> liverpool  london
 ~~~
+
+Changelog
+---------
+### Future (Set the new version)
+* Support of Python language
+* Rename of ruby module from **Completer** to **BashCompleter**
+* Addition of a method in ruby to register options
+* Addition of a helper function in ruby to compare the script to a stream
+
+### V1.0.0
+First release of the project
