@@ -15,6 +15,7 @@ Table of contents
 * [Licence](#licence)
 * [Known issues](#known-issues)
 * [Notes](#notes)
+* [Changelog](#changelog)
 
 How it works
 ------------
@@ -301,3 +302,14 @@ myprogram --country france --city p
 myprogram --country england --city l
 >> liverpool  london
 ~~~
+
+Changelog
+---------
+### Future (Set the new version)
+* Support of Python language
+* Rename of ruby module from **Completer** to **BashCompleter**
+* Addition of a method in ruby to register options
+* Addition of a helper function in ruby to compare the script to a stream
+
+### V1.0.0
+First release of the project
