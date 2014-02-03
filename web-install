@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-VERSION="v1.1.1"
+VERSION="v1.2.0"
 PROJECT_ROOT="$HOME/.bash-completer"
 
 # Stop if the program is already present

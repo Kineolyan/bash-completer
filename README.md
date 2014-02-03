@@ -305,7 +305,7 @@ myprogram --country england --city l
 
 Changelog
 ---------
-### Future (Set the new version)
+### v1.2.0
 * Support of Python language
 * Rename of ruby module from **Completer** to **BashCompleter**
 * Addition of a method in ruby to register options
