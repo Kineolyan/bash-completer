@@ -185,7 +185,7 @@ require '~/.bash-completer/lib/completer-util'
 
 BashCompleter::Completer.new do
   complete_actions do |stream|
-    next 0 if BashComplete::is_nezer? stream
+    next 0 if BashCompleter::is_newer? stream
     next 1, "me", "you", "others"
   end
 
