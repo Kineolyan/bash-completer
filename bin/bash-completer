@@ -32,8 +32,8 @@ __complete__options() {
   return 1
 }
 
-source $HOME/.bash-completer/lib/completer-util.sh
-source $HOME/.bash-completer/completer-lib.sh
+source "$HOME/.bash-completer/lib/completer-util.sh"
+source "$HOME/.bash-completer/completer-lib.sh"
 
 printHelp() {
   cat <<HELP
