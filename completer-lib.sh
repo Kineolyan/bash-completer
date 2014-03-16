@@ -28,6 +28,11 @@ getStream() {
   return 0
 }
 
+# Prints the current version of bash-completer
+printVersion() {
+  cat "$COMPLETION_FOLDER/VERSION"
+}
+
 # Records values for completion for a program in a specific context
 # $1 program name
 # $2 context
@@ -139,6 +144,10 @@ unregister() {
   done < <(grep -vE "^.*# program:${program}$" $REGISTRATION_FILE)
 
   return 0
+}
+
+listRecordedPrograms() {
+  [ -e "$REGISTRATION_FILE" ] && cat "$REGISTRATION_FILE"
 }
 
 # local variables
