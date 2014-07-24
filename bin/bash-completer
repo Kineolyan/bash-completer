@@ -37,7 +37,30 @@ source "$HOME/.bash-completer/completer-lib.sh"
 
 printHelp() {
   cat <<HELP
-Usage: $0 [options]
+Usage: $0 [options] [action]
+
+There is no particular action for the util.
+Depending on the options given, it will run the appropriate action, such as --help or --version does.
+
+Actions:
+  -h, --help: prints this message
+  -v, --version: prints the version of bash-completer
+
+  --list: list all programs registered to the completion process
+
+  --get OPTION: for a name program, get the completion for the given OPTION
+  --get-options: for a name program, get the completion of options
+  --get-actions: for a name program, get the completion of actions
+
+  --complete OPTION: for a name program, fetch the completion for the given OPTION
+  --complete-options: for a name program, fetch the completion of options
+  --complete-actions: for a name program, fetch the completion of actions
+
+  --register NAME: register NAME (assumed to be an executable) for completion
+  --unregister NAME: unregister NAME of completion process
+
+Options:
+  --program NAME: define the program to manage
 HELP
 }
 
