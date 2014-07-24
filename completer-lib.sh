@@ -136,12 +136,18 @@ unregister() {
 
   local readonly program="$1"
 
-  local clearFile=0
-  while read line
-  do
-    [[ $clearFile = 0 ]] && clearFile=1 && > $REGISTRATION_FILE
-    echo $line >> $REGISTRATION_FILE
-  done < <(grep -vE "^.*# program:${program}$" $REGISTRATION_FILE)
+  local readonly nbOfRemainingLines=$(grep -cvE "^.*# program:${program}$" $REGISTRATION_FILE)
+  if [[ $nbOfRemainingLines = 0 ]]
+  then
+    > $REGISTRATION_FILE
+  else
+    local clearFile=0
+    while read line
+    do
+      [[ $clearFile = 0 ]] && clearFile=1 && > $REGISTRATION_FILE
+      echo $line >> $REGISTRATION_FILE
+    done < <(grep -vE "^.*# program:${program}$" $REGISTRATION_FILE)
+  fi
 
   return 0
 }
