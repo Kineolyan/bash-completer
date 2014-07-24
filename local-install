@@ -22,8 +22,8 @@ then
     cd $TARGET_DIR
     ./install
   fi
-
-else
+elif [[ $1 == "full" ]]
+then
   readonly TEMP_DIR="/tmp/bash-completer@save-$(date +%Y%m%d+%H%M)"
 
   # Prepare the target folder
@@ -54,4 +54,6 @@ else
   # Restore previous files
   cp -R "$TEMP_DIR"/* .
   rm -rf "$TEMP_DIR"
+else
+  echo "Select mode between 'fast' or 'full'"
 fi
