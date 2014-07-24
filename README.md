@@ -305,6 +305,15 @@ myprogram --country england --city l
 
 Changelog
 ---------
+### v1.3.0
+* Improvements
+    * Improve bash-completer by adding options to get completions of programs
+    * Add help on bash-completer
+    * Correct unregistration of programs
+* Bug fixes
+    * Correct names of bash variables used by lib not to clash with user-defined variables
+    * Add quotes on bash variables
+
 ### v1.2.0
 * Support of Python language
 * Rename of ruby module from **Completer** to **BashCompleter**
