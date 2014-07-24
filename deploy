@@ -53,7 +53,5 @@ then
   fi
 
   git rebase master develop
+  git push origin develop master
 fi
-
-[[ $target == "develop" ]] && git push origin develop
-[[ $target == "master" ]] && git push origin master
