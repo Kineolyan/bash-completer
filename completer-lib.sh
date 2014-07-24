@@ -147,7 +147,15 @@ unregister() {
 }
 
 listRecordedPrograms() {
-  [ -e "$REGISTRATION_FILE" ] && cat "$REGISTRATION_FILE"
+  local programs=
+  [ -e "$REGISTRATION_FILE" ] && programs=$(cat "$REGISTRATION_FILE")
+
+  if [ -n "$programs" ]
+  then
+    echo $programs
+  else
+    echo 'No program registered'
+  fi
 }
 
 # local variables
