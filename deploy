@@ -53,5 +53,5 @@ then
   fi
 
   git rebase master develop
-  git push origin develop master
+  git push --tags origin develop master
 fi
