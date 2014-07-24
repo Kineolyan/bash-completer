@@ -29,17 +29,19 @@ done
 
 readonly branch=$1
 
+[ -z "$branch" ] && echo "no branch defined" && exit 2
+
 if [[ $target == "master" ]] || [[ $target == "develop" ]]
 then
   git checkout develop
-  git merge --no-ff "$branch"
+  git merge --no-ff --log "$branch"
 fi
 
 if [[ $target == "master" ]]
 then
   # merge in master
   git checkout master
-  git merge --no-ff develop
+  git merge --no-ff --log develop
 
   # set the tag if any
   if [ -n "$version" ]
