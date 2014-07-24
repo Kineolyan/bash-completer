@@ -28,6 +28,11 @@ getStream() {
   return 0
 }
 
+# Prints the current version of bash-completer
+printVersion() {
+  cat "$COMPLETION_FOLDER/VERSION"
+}
+
 # Records values for completion for a program in a specific context
 # $1 program name
 # $2 context
@@ -131,14 +136,32 @@ unregister() {
 
   local readonly program="$1"
 
-  local clearFile=0
-  while read line
-  do
-    [[ $clearFile = 0 ]] && clearFile=1 && > $REGISTRATION_FILE
-    echo $line >> $REGISTRATION_FILE
-  done < <(grep -vE "^.*# program:${program}$" $REGISTRATION_FILE)
+  local readonly nbOfRemainingLines=$(grep -cvE "^.*# program:${program}$" $REGISTRATION_FILE)
+  if [[ $nbOfRemainingLines = 0 ]]
+  then
+    > $REGISTRATION_FILE
+  else
+    local clearFile=0
+    while read line
+    do
+      [[ $clearFile = 0 ]] && clearFile=1 && > $REGISTRATION_FILE
+      echo $line >> $REGISTRATION_FILE
+    done < <(grep -vE "^.*# program:${program}$" $REGISTRATION_FILE)
+  fi
 
   return 0
+}
+
+listRecordedPrograms() {
+  local programs=
+  [ -e "$REGISTRATION_FILE" ] && programs=$(cat "$REGISTRATION_FILE")
+
+  if [ -n "$programs" ]
+  then
+    echo $programs
+  else
+    echo 'No program registered'
+  fi
 }
 
 # local variables

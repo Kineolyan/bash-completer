@@ -19,7 +19,7 @@ __completer() {
   local values=
   local optionCompleted=1
 
-  #echo -e "nArgs=[$@]nProgram: [$program]nPrev - Cur = [$prev] - [$cur]"
+  #echo -e "\nArgs=[$@]\nProgram: [$program]\nPrev - Cur = [$prev] - [$cur]"
 
   # Get the completion for the option
   if [[ $prev == -* ]]

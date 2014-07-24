@@ -1,0 +1,57 @@
+#!/bin/bash
+set -e
+
+readonly shortOptions='t:,v:'
+readonly longOptions='target:,version:'
+
+args=$(getopt -s bash -o "$shortOptions" -l "$longOptions" -- "$@")
+[ $? -ne 0 ] && echo Erreur && exit 1
+
+eval set -- "$args"
+
+target="master"
+while true
+do
+  option="$1"
+  shift 1
+  case $option in
+  -t|--target)
+    target="$1"
+    shift 1
+    ;;
+  -v|--version)
+    version="$1"
+    shift 1
+    ;;
+  --) break ;;
+  esac
+done
+
+readonly branch=$1
+
+[ -z "$branch" ] && echo "no branch defined" && exit 2
+
+if [[ $target == "master" ]] || [[ $target == "develop" ]]
+then
+  git checkout develop
+  git merge --no-ff --log "$branch"
+fi
+
+if [[ $target == "master" ]]
+then
+  # merge in master
+  git checkout master
+  git merge --no-ff --log develop
+
+  # set the tag if any
+  if [ -n "$version" ]
+  then
+    echo "$version" > VERSION
+    git add VERSION
+    git commit -m "Set version to $version."
+    git tag -am "Version $version of project bash-completer" "$version"
+  fi
+
+  git rebase master develop
+  git push origin develop master
+fi

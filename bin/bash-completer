@@ -2,8 +2,13 @@
 
 #echo -e "Call to $0 with [$@]"
 
-readonly longOptions='program:,register:,unregister:,record:,record-options,record-actions,complete:,complete-actions,complete-options,get:,get-options,get-actions'
-readonly shortOptions=''
+readonly longOptions="program:,list\
+,register:,unregister:\
+,record:,record-options,record-actions\
+,complete:,complete-actions,complete-options\
+,get:,get-options,get-actions\
+,version,help"
+readonly shortOptions='v,h'
 
 convertOptions() {
   local readonly prefix="$1"
@@ -27,8 +32,37 @@ __complete__options() {
   return 1
 }
 
-source $HOME/.bash-completer/lib/completer-util.sh
-source $HOME/.bash-completer/completer-lib.sh
+source "$HOME/.bash-completer/lib/completer-util.sh"
+source "$HOME/.bash-completer/completer-lib.sh"
+
+printHelp() {
+  cat <<HELP
+Usage: $0 [options] [action]
+
+There is no particular action for the util.
+Depending on the options given, it will run the appropriate action, such as --help or --version does.
+
+Actions:
+  -h, --help: prints this message
+  -v, --version: prints the version of bash-completer
+
+  --list: list all programs registered to the completion process
+
+  --get OPTION: for a name program, get the completion for the given OPTION
+  --get-options: for a name program, get the completion of options
+  --get-actions: for a name program, get the completion of actions
+
+  --complete OPTION: for a name program, fetch the completion for the given OPTION
+  --complete-options: for a name program, fetch the completion of options
+  --complete-actions: for a name program, fetch the completion of actions
+
+  --register NAME: register NAME (assumed to be an executable) for completion
+  --unregister NAME: unregister NAME of completion process
+
+Options:
+  --program NAME: define the program to manage
+HELP
+}
 
 readonly args=$(getopt -s bash -o "$shortOptions" -l "$longOptions" -- "$@")
 if [ $? -ne 0 ]
@@ -55,8 +89,12 @@ do
       context="__${option//--[a-z]*-/}" ;;
     --[a-z]*)
       mode=${option#--}
-      context="$1"
-      shift 1 ;;
+      [[ $longOptions == *$mode:* ]] && context="$1" && shift 1
+      ;;
+    -[a-zA-Z])
+      mode=${option#-}
+      [[ $shortOptions == *$mode:* ]] && context="$1" && shift 1
+      ;;
     # end of loop and errors
     --) break ;;
     *) echo "Invalid option $option"
@@ -65,6 +103,12 @@ done
 
 # parse values
 case $mode in
+  h|help)
+    printHelp ;;
+  v|version)
+    printVersion ;;
+  list)
+    listRecordedPrograms ;;
   record)
     record $program $context "$@" ;;
   complete)

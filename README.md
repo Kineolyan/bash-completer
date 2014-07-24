@@ -121,8 +121,8 @@ These functions are meant to be called by the library, located in &lt;path to ba
 This script must be added after the definition of the method. It will capture the request for completion and exists the script after the completion is done. For other requests, it will have no effect. A call of the script for completion is detected testing if **"--__complete"** is one of the arguments provided to the script.
 
 This is the list of functions to do the completion:
-* **for actions**: \_\_complete_actions
-* **for options**: \_\_complete_options
+* **for actions**: \_\_complete__actions
+* **for options**: \_\_complete__options
 * **for your options**: the function name must follow the pattern **\_\_complete&lt;option&gt;** with all '-' in option replace by '@'.
 
     *For example: completion of -l is handled by \_\_complete@l, --no-ff by \_\_complete@@no@ff*
@@ -185,7 +185,7 @@ require '~/.bash-completer/lib/completer-util'
 
 BashCompleter::Completer.new do
   complete_actions do |stream|
-    next 0 if BashComplete::is_nezer? stream
+    next 0 if BashCompleter::is_newer? stream
     next 1, "me", "you", "others"
   end
 
