@@ -49,7 +49,7 @@ then
     echo "$version" > VERSION
     git add VERSION
     git commit -m "Set version to $version."
-    git tag "$version"
+    git tag -am "Version $version of project bash-completer" "$version"
   fi
 
   git rebase master develop
