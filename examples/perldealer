@@ -1,0 +1,22 @@
+#!/bin/perl
+use strict;
+use warnings;
+use Getopt::Long;
+
+my $quantity = 1;
+GetOptions ("quantity=i" => \$quantity)   # flag
+or die("Error in command line arguments\n");
+
+print "I buy and sell perls.\n";
+
+my $action = shift or die "Specify an action: 'buy' or 'sell'.";
+
+if ($action eq 'buy') {
+	print "There are your $quantity perls.\n";
+} elsif ($action eq "sell") {
+	print "Thanks for these $quantity perls.\n";
+} else {
+	print "Invalid action: 'buy' or 'sell'.\n";
+}
+
+exit 0;
