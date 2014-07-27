@@ -1,6 +1,25 @@
-#!/bin/perl
+#!/usr/bin/env perl
 use strict;
 use warnings;
+BEGIN {push @INC, '/mnt/Grishka/Projets/shell/bash-completer/lib'}
+
+## Completion of perldealer
+use BashCompleter;
+BashCompleter::complete_options('-n', '--quantity', sub {
+	print '1 5 10';
+	return 1;
+});
+BashCompleter::complete_actions(sub {
+	print "a b c d e";
+
+	return 1;
+});
+BashCompleter::collect_options('-t', '--test');
+BashCompleter::complete();
+
+## Rest of the program
+print "\ncontinuation of program\n";
+
 use Getopt::Long;
 
 my $quantity = 1;
