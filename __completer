@@ -24,7 +24,16 @@ __completer() {
   # Get the completion for the option
   if [[ $prev == -* ]]
   then
-    values=$($COMPLETION_TOOL --program $program --complete $prev)
+    nextValues=$($COMPLETION_TOOL --program $program --complete $prev)
+
+    # Authorize comma-separated list only for option values
+    lastValue=$(echo $cur | sed -e 's/^.*,//')
+    local validValues=${cur%$lastValue}
+    for value in $nextValues
+    do
+      values="$values ${validValues}${value}"
+    done
+
     completionCode=$?
     optionCompleted=0
   fi
@@ -39,6 +48,7 @@ __completer() {
   fi
 
   COMPREPLY=( $( compgen -W "$values" -- $cur ) )
+
   # set +x
   return 0
 }
