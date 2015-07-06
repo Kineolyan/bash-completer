@@ -25,6 +25,7 @@ __completer() {
   if [[ $prev == -* ]]
   then
     nextValues=$($COMPLETION_TOOL --program $program --complete $prev)
+    completionCode=$?
 
     # Authorize comma-separated list only for option values
     lastValue=$(echo $cur | sed -e 's/^.*,//')
@@ -34,11 +35,10 @@ __completer() {
       values="$values ${validValues}${value}"
     done
 
-    completionCode=$?
     optionCompleted=0
   fi
 
-  if [[ $optionCompleted = 1 ]] || [[ $completionCode > 2 ]]
+  if [[ $optionCompleted = 1 ]] || (( $completionCode > 2 ))
   then
   # There is no completion for the option
     case $cur in

@@ -96,7 +96,7 @@ doCompletion() {
   values=$(checkCompletion $program $context)
   exitCode=$?
   # it fails or there is no completion to expect
-  [[ $exitCode > 2 ]] && exit $exitCode
+  (( $exitCode > 2 )) && exit $exitCode
 
   if [ $exitCode -eq 2 ]
   then
