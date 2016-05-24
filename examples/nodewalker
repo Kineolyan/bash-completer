@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const cmpl = require('completer-util')
+const cmpl = require('../lib/completer-util.js');
 
 /**
  * Checks if completion must be refreshed
@@ -15,25 +15,28 @@ const cmpl = require('completer-util')
  */
 new cmpl.Completer((completer) => {
   completer.completeActions(stream => {
-    if (cmpl.is_newer(stream)) {
-      return 0;
+    if (cmpl.isNewer(stream)) {
+      return [0];
     }
 
     return [1, 'chouchou', 'olivier', 'colombe'];
-  }
+  });
 
   completer.completeOptions(
-    '-l', '--language',
-    stream => return [2, 'geek', 'francais', 'anglais', 'cowboy'];
+    stream => [2, 'geek', 'francais', 'anglais', 'cowboy'],
+    '-l', '--language'
   );
 
-  completer.completeOptions('-n', '--number', stream => {
-    if (cmpl.is_newer(stream)) {
-      return 0;
-    }
+  completer.completeOptions(
+    stream => {
+      if (cmpl.isNewer(stream)) {
+        return [0];
+      }
 
-    return [1, 1, 5, 10];
-  });
+      return [1, 1, 5, 10];
+    },
+    '-n', '--number'
+  );
 
   completer.registerOptions(
     "-a", "--abort",
