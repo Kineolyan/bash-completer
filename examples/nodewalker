@@ -1,0 +1,46 @@
+#!/usr/bin/env node
+
+const cmpl = require('completer-util')
+
+/**
+ * Checks if completion must be refreshed
+ * Params:
+ * * stream stream containing the previous completion values, or '' if stream does not already exist
+ * Completion values are printed
+ * Returns:
+ *  0 if the values are up-to-date
+ *  1 if new values are set, these values are echoed
+ *  2 if there is no need to store the values, these values are echoed
+ *  3 if there is no completion
+ */
+new cmpl.Completer((completer) => {
+  completer.completeActions(stream => {
+    if (cmpl.is_newer(stream)) {
+      return 0;
+    }
+
+    return [1, 'chouchou', 'olivier', 'colombe'];
+  }
+
+  completer.completeOptions(
+    '-l', '--language',
+    stream => return [2, 'geek', 'francais', 'anglais', 'cowboy'];
+  );
+
+  completer.completeOptions('-n', '--number', stream => {
+    if (cmpl.is_newer(stream)) {
+      return 0;
+    }
+
+    return [1, 1, 5, 10];
+  });
+
+  completer.registerOptions(
+    "-a", "--abort",
+    "-t", "--test",
+    "-h", "--help"
+  );
+});
+
+console.log('Walking on, ... walking on the nodes');
+process.exit(0)
