@@ -115,8 +115,8 @@ case $mode in
     doCompletion $program $context "$@";;
   get)
     getCompletion $program $context ;;
-  register) register $context;;
-  unregister) unregister $context;;
+  register) register $context ;;
+  unregister) unregister $context ;;
   *)
     echo "Error: invalid mode '$mode'"
     exit 2;

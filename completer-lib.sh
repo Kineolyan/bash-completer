@@ -67,7 +67,7 @@ checkCompletion() {
   [ ! -e $stream ] && stream=''
   local readonly casedContext=${context//-/@}
 
-  $program --__complete "$casedContext" --__stream "$stream" "$@"
+  $program --__complete "$casedContext" --__stream "$stream" -- "$@"
   return $?
 }
 
@@ -103,8 +103,7 @@ doCompletion() {
 
   if [ $exitCode -eq 2 ]
   then
-    # Remove the file if any
-    local readonly stream="$(getStream $program $context)"
+    # Keeping the file even if it says that now, it is useless
     echo $values
     return 0
   else
