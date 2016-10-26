@@ -48,7 +48,7 @@ record() {
   # Clear stream from previous values
   > $stream
 
-  for value in $@
+  for value in "$@"
   do
     echo $value >> $stream
   done
@@ -61,12 +61,13 @@ record() {
 checkCompletion() {
   local readonly program="$1"
   local readonly context="$2"
+  shift 2
 
   local readonly stream="$(getStream $program $context)"
   [ ! -e $stream ] && stream=''
   local readonly casedContext=${context//-/@}
 
-  $program --__complete "$casedContext" --__stream "$stream"
+  $program --__complete "$casedContext" --__stream "$stream" "$@"
   return $?
 }
 
@@ -93,13 +94,17 @@ getCompletion() {
 doCompletion() {
   local readonly program="$1"
   local readonly context="$2"
-  values=$(checkCompletion $program $context)
-  exitCode=$?
+  shift 2
+
+  local values=$(checkCompletion $program $context "$@")
+  local exitCode=$?
   # it fails or there is no completion to expect
   (( $exitCode > 2 )) && exit $exitCode
 
   if [ $exitCode -eq 2 ]
   then
+    # Remove the file if any
+    local readonly stream="$(getStream $program $context)"
     echo $values
     return 0
   else

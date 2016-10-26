@@ -16,6 +16,7 @@ __completer() {
   local cur=${COMP_WORDS[$argc]}
   local prev=${COMP_WORDS[$argc-1]}
   local program=${COMP_WORDS[0]}
+  local allArgs=("${COMP_WORDS[@]}")
   local values=
   local optionCompleted=1
 
@@ -24,7 +25,7 @@ __completer() {
   # Get the completion for the option
   if [[ $prev == -* ]]
   then
-    nextValues=$($COMPLETION_TOOL --program $program --complete $prev)
+    nextValues=$($COMPLETION_TOOL --program $program --complete $prev -- $allArgs)
     completionCode=$?
 
     # Authorize comma-separated list only for option values
@@ -42,8 +43,8 @@ __completer() {
   then
   # There is no completion for the option
     case $cur in
-    -*) values=$($COMPLETION_TOOL --program $program --complete-options) ;;
-    *) values=$($COMPLETION_TOOL --program $program --complete-actions) ;;
+    -*) values=$($COMPLETION_TOOL --program $program --complete-options -- $allArgs) ;;
+    *) values=$($COMPLETION_TOOL --program $program --complete-actions -- $allArgs) ;;
     esac
   fi
 

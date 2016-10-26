@@ -48,9 +48,9 @@ Actions:
 
   --list: list all programs registered to the completion process
 
-  --get OPTION: for a name program, get the completion for the given OPTION
-  --get-options: for a name program, get the completion of options
-  --get-actions: for a name program, get the completion of actions
+  --get OPTION: for a name program, get the recorded completion for the given OPTION
+  --get-options: for a name program, get the recorded completion of options
+  --get-actions: for a name program, get the recorded completion of actions
 
   --complete OPTION: for a name program, fetch the completion for the given OPTION
   --complete-options: for a name program, fetch the completion of options
@@ -112,7 +112,7 @@ case $mode in
   record)
     record $program $context "$@" ;;
   complete)
-    doCompletion $program $context ;;
+    doCompletion $program $context "$@";;
   get)
     getCompletion $program $context ;;
   register) register $context;;
